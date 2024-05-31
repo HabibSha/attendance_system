@@ -1,6 +1,6 @@
 const express = require("express");
 const createError = require("http-errors");
-const cookieParser = require('cookie-parser');
+const cookieParser = require("cookie-parser");
 
 const { errorResponse } = require("./controllers/responseController");
 const userRouter = require("./routers/userRouter");
@@ -12,14 +12,14 @@ const PORT = 4000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser())
+app.use(cookieParser());
 
 // routers
 app.use("/", userRouter);
 
-app.get("/", (req, res) => {
-  res.json("Hello I am root router");
-});
+// app.get("/", (req, res) => {
+//   res.json("Hello I am root router");
+// });
 
 // Client error handling
 app.use((req, res, next) => {
