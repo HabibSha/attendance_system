@@ -17,9 +17,9 @@ app.use(cookieParser());
 // routers
 app.use("/", userRouter);
 
-// app.get("/", (req, res) => {
-//   res.json("Hello I am root router");
-// });
+app.get("/health", (req, res) => {
+  res.status(200).json({ message: "Success" });
+});
 
 // Client error handling
 app.use((req, res, next) => {
