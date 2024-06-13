@@ -15,7 +15,8 @@ const userSchema = new Schema(
       lowercase: true,
       validate: {
         validator: (v) => {
-          return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v);
+          const emailRegEx = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+          return emailRegEx.test(v);
         },
         message: (props) => `${props.value} is not a valid email address`,
       },
