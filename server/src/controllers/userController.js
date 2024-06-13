@@ -13,7 +13,7 @@ const jwtRefreshKey = "alskdnahvntlkasudfo";
 const handleProcessRegister = async (req, res, next) => {
   try {
     const { name, email, password, roles, accountStatus } = req.body;
-    const userExists = await User.exists({ email: email });
+    const userExists = await User.exists({ email });
     if (userExists) {
       throw createError(
         400,

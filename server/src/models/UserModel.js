@@ -13,6 +13,12 @@ const userSchema = new Schema(
       trim: true,
       unique: true,
       lowercase: true,
+      validate: {
+        validator: (v) => {
+          return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v);
+        },
+        message: (props) => `${props.value} is not a valid email address`,
+      },
     },
     password: {
       type: String,
@@ -20,8 +26,17 @@ const userSchema = new Schema(
       minLength: [6, "Password must be at least 6 characters"],
       set: (v) => bcrypt.hashSync(v, bcrypt.genSaltSync(10)),
     },
-    roles: [String],
-    accountStatus: String,
+    roles: {
+      type: [String],
+      required: true,
+      default: ["STUDENT"],
+    },
+    accountStatus: {
+      type: String,
+      enum: ["PENDING", "ACTIVE", "REJECTED"],
+      required: true,
+      default: ["Pending"],
+    },
   },
   { timestamps: true }
 );
