@@ -17,17 +17,17 @@ app.use(cookieParser());
 // routers
 app.use("/", userRouter);
 
-app.get("/health", (req, res) => {
+app.get("/health", (_req, res) => {
   res.status(200).json({ message: "Success" });
 });
 
 // Client error handling
-app.use((req, res, next) => {
+app.use((_req, _res, next) => {
   next(createError(404, "Router not found!"));
 });
 
 // Server error handling -- all the errors
-app.use((err, req, res, next) => {
+app.use((err, _req, res, _next) => {
   return errorResponse(res, {
     statusCode: err.status,
     message: err.message,
