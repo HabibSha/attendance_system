@@ -1,11 +1,13 @@
 const {
-  handleProcessRegister,
-  handleLogin,
+  handleGetAllUsers,
+  handleGetUserById,
+  handleDeleteUserById,
 } = require("../controllers/userController");
 
 const userRouter = require("express").Router();
 
-userRouter.post("/process-register", handleProcessRegister);
-userRouter.post("/login", handleLogin);
+userRouter.get("/", handleGetAllUsers);
+userRouter.get("/:id", handleGetUserById);
+userRouter.delete("/:id", handleDeleteUserById);
 
 module.exports = userRouter;

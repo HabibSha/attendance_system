@@ -33,10 +33,10 @@ const userSchema = new Schema(
       default: ["STUDENT"],
     },
     accountStatus: {
-      type: String,
+      type: [String],
       enum: ["PENDING", "ACTIVE", "REJECTED"],
       required: true,
-      default: ["Pending"],
+      default: "PENDING",
     },
   },
   { timestamps: true }
