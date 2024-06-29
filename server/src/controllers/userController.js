@@ -3,6 +3,7 @@ const createError = require("http-errors");
 const User = require("../models/UserModel");
 const { successResponse } = require("./responseController");
 const findWithId = require("../services/findItem");
+const { userRegisterService } = require("../services/authService");
 
 // Get all users
 const handleGetAllUsers = async (_req, res, next) => {
@@ -40,6 +41,29 @@ const handleGetUserById = async (req, res, next) => {
   }
 };
 
+// Create user by admin
+const handleCreateUser = async (req, res, next) => {
+  try {
+    const { name, email, password, roles, accountStatus } = req.body;
+
+    const newUser = await userRegisterService({
+      name,
+      email,
+      password,
+      roles,
+      accountStatus,
+    });
+
+    return successResponse(res, {
+      statusCode: 201,
+      message: "User was created successfully",
+      payload: newUser,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // Delete single user by id
 const handleDeleteUserById = async (req, res, next) => {
   try {
@@ -60,4 +84,9 @@ const handleDeleteUserById = async (req, res, next) => {
   }
 };
 
-module.exports = { handleGetAllUsers, handleGetUserById, handleDeleteUserById };
+module.exports = {
+  handleGetAllUsers,
+  handleGetUserById,
+  handleCreateUser,
+  handleDeleteUserById,
+};

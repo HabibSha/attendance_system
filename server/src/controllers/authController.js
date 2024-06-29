@@ -4,7 +4,10 @@ const createError = require("http-errors");
 const User = require("../models/UserModel");
 const { successResponse } = require("./responseController");
 const createJSONWebToken = require("../helper/jsonwebtoken");
-const { setAccessTokenCookie } = require("../helper/cookie");
+const {
+  setAccessTokenCookie,
+  setRefreshTokenCookie,
+} = require("../helper/cookie");
 const { userRegisterService } = require("../services/authService");
 
 const jwtAccessKey = "alskjfaksdfjasl;dfk";
@@ -15,7 +18,7 @@ const handleProcessRegister = async (req, res, next) => {
   try {
     const { name, email, password, roles, accountStatus } = req.body;
 
-    // from service folder's authService file
+    // userRegisterService function from service folder's authService file
     const newUser = await userRegisterService({
       name,
       email,
@@ -58,7 +61,7 @@ const handleLogin = async (req, res, next) => {
 
     // create jwt for refresh token
     const refreshToken = createJSONWebToken({ user }, jwtRefreshKey, "7d");
-    setAccessTokenCookie(res, refreshToken);
+    setRefreshTokenCookie(res, refreshToken);
 
     // hiding password from result
     const userWithoutPassword = user.toObject();
