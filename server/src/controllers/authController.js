@@ -5,6 +5,7 @@ const User = require("../models/UserModel");
 const { successResponse } = require("./responseController");
 const createJSONWebToken = require("../helper/jsonwebtoken");
 const { setAccessTokenCookie } = require("../helper/cookie");
+const { userRegisterService } = require("../services/authService");
 
 const jwtAccessKey = "alskjfaksdfjasl;dfk";
 const jwtRefreshKey = "alskdnahvntlkasudfo";
@@ -13,22 +14,15 @@ const jwtRefreshKey = "alskdnahvntlkasudfo";
 const handleProcessRegister = async (req, res, next) => {
   try {
     const { name, email, password, roles, accountStatus } = req.body;
-    const userExists = await User.exists({ email });
-    if (userExists) {
-      throw createError(
-        400,
-        "User with this email already exists. Please login"
-      );
-    }
-    const newUser = new User({
+
+    // from service folder's authService file
+    const newUser = await userRegisterService({
       name,
       email,
       password,
-      roles: roles ? roles : ["STUDENT"],
-      accountStatus: accountStatus ? accountStatus : ["PENDING"],
+      roles,
+      accountStatus,
     });
-
-    await newUser.save();
 
     return successResponse(res, {
       statusCode: 201,
