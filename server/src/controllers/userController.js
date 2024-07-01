@@ -4,6 +4,7 @@ const User = require("../models/UserModel");
 const { successResponse } = require("./responseController");
 const findWithId = require("../services/findItem");
 const { userRegisterService } = require("../services/authService");
+const { updateUserService } = require("../services/userService");
 
 // Get all users
 const handleGetAllUsers = async (_req, res, next) => {
@@ -64,6 +65,49 @@ const handleCreateUser = async (req, res, next) => {
   }
 };
 
+// Update user with Patch method
+const handleUpdateUserWithPatch = async (req, res, next) => {
+  try {
+    const { name, roles, accountStatus } = req.body;
+    const userId = req.params.id;
+    const options = { password: 0 };
+
+    const user = await findWithId(User, userId, options);
+
+    user.name = name ?? user.name;
+    user.roles = roles ?? user.roles;
+    user.accountStatus = accountStatus ?? user.accountStatus;
+
+    await user.save();
+
+    return successResponse(res, {
+      statusCode: 200,
+      message: "User was updated successfully",
+      payload: user,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Update user with Put method
+const handleUpdateUserWithPut = async (req, res, next) => {
+  try {
+    const updatedUser = await updateUserService(req);
+    if (!updatedUser) {
+      throw createError(404, "User with this ID does not exists!");
+    }
+
+    return successResponse(res, {
+      statusCode: 200,
+      message: "User was updated successfully",
+      payload: updatedUser,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // Delete single user by id
 const handleDeleteUserById = async (req, res, next) => {
   try {
@@ -88,5 +132,7 @@ module.exports = {
   handleGetAllUsers,
   handleGetUserById,
   handleCreateUser,
+  handleUpdateUserWithPatch,
+  handleUpdateUserWithPut,
   handleDeleteUserById,
 };
