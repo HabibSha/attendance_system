@@ -1,3 +1,5 @@
+const userRouter = require("express").Router();
+
 const {
   handleGetAllUsers,
   handleGetUserById,
@@ -6,8 +8,6 @@ const {
   handleUpdateUserWithPatch,
   handleUpdateUserWithPut,
 } = require("../controllers/userController");
-
-const userRouter = require("express").Router();
 
 userRouter.get("/", handleGetAllUsers);
 userRouter.get("/:id", handleGetUserById);

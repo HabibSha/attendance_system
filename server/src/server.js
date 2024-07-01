@@ -6,6 +6,7 @@ const { errorResponse } = require("./controllers/responseController");
 const userRouter = require("./routers/userRouter");
 const connectDatabase = require("./config/database");
 const authRouter = require("./routers/authRouter");
+const adminAttendanceRouter = require("./routers/adminAttendanceRouter");
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(cookieParser());
 // routers
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/admin/attendance", adminAttendanceRouter);
 
 app.get("/health", (_req, res) => {
   res.status(200).json({ message: "Success" });
