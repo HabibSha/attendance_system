@@ -1,5 +1,5 @@
 const createError = require("http-errors");
-const { addMinutes, isAfter } = require("date-fns");
+const { isAfter, addMinutes } = require("date-fns");
 
 const AdminAttendance = require("../models/AdminAttendanceModel");
 
@@ -34,7 +34,8 @@ const handleGetStatus = async (req, res, next) => {
       throw createError(400, "Not Running");
     }
 
-    const started = addMinutes(new Date(running.createdAt, running.timeLimit));
+    const started = addMinutes(new Date(running.createdAt), running.timeLimit);
+
     if (isAfter(new Date(), started)) {
       running.status = "COMPLETED";
       await running.save();
@@ -53,6 +54,19 @@ const handleGetStatus = async (req, res, next) => {
 // disable attendance
 const handleGetDisable = async (req, res, next) => {
   try {
+    const running = await AdminAttendance.findOne({ status: "RUNNING" });
+    if (!running) {
+      throw createError(400, "Not Running");
+    }
+
+    running.status = "COMPLETED";
+    await running.save();
+
+    return successResponse(res, {
+      statusCode: 200,
+      message: "Successful",
+      payload: running,
+    });
   } catch (error) {
     next(error);
   }

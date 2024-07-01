@@ -5,8 +5,8 @@ const adminAttendanceSchema = new Schema(
     timeLimit: {
       type: Number,
       required: true,
-      min: 5,
       max: 30,
+      min: 5,
       default: 5,
     },
     status: {
